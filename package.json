@@ -1,0 +1,16 @@
+{
+  "name": "abbs",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "localhost": "servor src index.html 8080 --reload",
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.1.0"
+  },
+  "dependencies": {
+    "servor": "^4.0.2"
+  }
+}

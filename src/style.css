@@ -1,0 +1,135 @@
+body {
+  background: #111;
+  color: white;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+:root {
+  --accent: #fd8b8b;
+}
+
+input, button {
+  background: #222;
+  border: solid 2px #222;
+  border-radius: 5px;
+  color: white;
+  outline: none;
+  transition: 300ms;
+}
+input[type="checkbox"] {
+  cursor: pointer;
+  appearance: none;
+  margin: 0;
+  font: inherit;
+  color: var(--accent);
+  width: 1.5em;
+  height: 1.5em;
+  border: 0.15em solid #222;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+}
+input[type="checkbox"]::before {
+  content: "";
+  width: 1em;
+  height: 1em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--accent);
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+button {
+  cursor: pointer;
+  min-width: 100px;
+  min-height: 30px;
+}
+input:hover, button:hover {
+  border-color: var(--accent);
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#app {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  padding: 10px;
+  gap: 0;
+}
+#config > .sec {
+  background: rgb(24, 24, 24);
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+#config > .sec > * {
+  margin: 10px;
+}
+#control > .sec {
+  background: rgb(24, 24, 24);
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+#config > .sec.path > * {
+  display: inline-block;
+}
+#config > .sec.path > p {
+  color: #aaa;
+}
+#log {
+  background: rgb(35, 35, 35);
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  height: 20em;
+  word-wrap: break-word;
+  overflow-y: scroll;
+  user-select: text;
+  
+}
+.note {
+  color: #aaa;
+  font-size: 9pt;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgb(33, 33, 33);
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+}
+.red {
+  color: rgb(255, 68, 68);
+}
+.blue {
+  color: rgb(47, 158, 231);
+}
+.green {
+  color: rgb(68, 255, 74);
+}
+.white {
+  color: rgb(201, 201, 201);
+}
