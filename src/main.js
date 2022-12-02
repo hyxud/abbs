@@ -1,17 +1,18 @@
 const { invoke } = window.__TAURI__.tauri;
 const { createDir, removeDir, readDir, removeFile, BaseDirectory, exists, readTextFile, writeFile } = window.__TAURI__.fs;
 const { homeDir, join, resourceDir } = window.__TAURI__.path;
+const { Command } = window.__TAURI__.shell;
 let logDiv;
 let scroll = true;
 let homePath;
 
-let index
-let page
 
 let pdfPathInput;
 let imgPathInput;
 let jsonPathInput;
 let resPath;
+let list
+let on = false;
 
 let config = {
     reload: false,
@@ -21,7 +22,7 @@ let config = {
     page: 1,
     index: 0,
     local: true,
-    repition: false
+    repitition: false
 };
 
 function sleep(ms) {
@@ -56,9 +57,9 @@ function log(string) {
     updateScroll();
 }
 
-function start() {}
 function kill() {
-    inf("Killed");
+    warn("Stopping Bot. please wait until bot is safely stopped.")
+    on = false
 }
 function getUsedDir() {
     return config.local ? resPath : homePath
@@ -67,40 +68,20 @@ function usedDir() {
     return config.local ? BaseDirectory.Resource : BaseDirectory.Home
 }
 
-async function init() {
-    if (!existsSync(join(__dirname, "books.json"))) {
-        writeFileSync(join(__dirname, "books.json"), "[]");
-    }
-
-    config["index"] = 0;
-
-    if (!config["reload"]) {
-        config = JSON.parse(readFileSync(join(__dirname, "config.json")));
-        let jsonData = JSON.parse(readFileSync(join(__dirname, "books.json")));
-        json = JSON.parse(JSON.stringify(jsonData));
-        imgIndex = 0;
-        pdfIndex = 0;
-        if (!jsonData.length == 0) {
-            imgIndex = json[jsonData.length - 1].img + 1;
-            pdfIndex = json[jsonData.length - 1].pdf + 1;
-        }
-    }
-    checkdir(config["imagePath"]);
-    checkdir(config["pdfPath"]);
-
-    main();
-}
-async function reset() {
-    
-}
 
 function updateGui() {
     document.getElementById("pdf-p").innerHTML = getUsedDir();
     document.getElementById("img-p").innerHTML = getUsedDir();
     document.getElementById("json-p").innerHTML = getUsedDir();
     document.getElementById("local").checked = config.local
-    document.getElementById("rep").checked = config.repition
+    document.getElementById("rep").checked = config.repitition
     document.getElementById("reload").checked = config.reload
+    document.getElementById("index").value = config.index;
+    document.getElementById("page").value = config.page
+    document.getElementById("index").disabled = on;
+    document.getElementById("page").disabled = on
+    document.getElementById("start").classList.toggle("running", on)
+    document.getElementById("start").disabled = on
 
     jsonPathInput.value = config.jsonPath
     pdfPathInput.value = config.pdfPath
@@ -114,14 +95,11 @@ async function updateConfig() {
 async function check() {
     logDiv.innerHTML = ""
 
-    index = 0
-    page = 1
-
     if (await exists(await join(homePath, ".abbs", "config.json"))) {
         suc("found config.json");
         config = JSON.parse(await readTextFile(".abbs/config.json", {dir: BaseDirectory.Home}))
-        index = config.index
-        page = config.page
+
+        
         updateGui()
     } else {
         err("config.json not found");
@@ -203,9 +181,21 @@ async function initApp() {
     check()
 
 
-    document.getElementById("start").addEventListener("click", start);
-    document.getElementById("stop").addEventListener("click", kill);
+    document.getElementById("start").addEventListener("click", ()=>{
+        if (!on) {
+            on = true
+            start()
+            updateGui()
+        }
+    });
+    document.getElementById("stop").addEventListener("click", ()=>{
+        if (on) {
+            kill()
+            updateGui()
+        }
+    });
     document.getElementById("check").addEventListener("click", check);
+    document.getElementById("clearLog").addEventListener("click", ()=>{logDiv.innerHTML = ""});
 
 
     pdfPathInput = document.getElementById("pdf");
@@ -228,7 +218,18 @@ async function initApp() {
         config.jsonPath = e.target.value;
         updateConfig()
     });
-    
+
+    document.getElementById("index").addEventListener("change", (e) => {
+        config.index = parseInt(e.target.value);
+        updateConfig()
+        updateGui()
+    });
+    document.getElementById("page").addEventListener("change", (e) => {
+        config.page = parseInt(e.target.value);
+        
+        updateConfig()
+        updateGui()
+    });
 
     document.getElementById("autoscroll").addEventListener("change", (e) => {
         scroll = e.target.checked;
@@ -239,7 +240,7 @@ async function initApp() {
         updateGui()
     });
     document.getElementById("rep").addEventListener("change", (e) => {
-        config.repition = e.target.checked ? true : false
+        config.repitition = e.target.checked ? true : false
         updateConfig()
         updateGui()
     });
@@ -251,5 +252,87 @@ async function initApp() {
 
 
 }
+
+
+
+
+async function start() {
+    updateGui()
+    try {
+        if (!on) {
+            suc("the bot has been safely Stopped")
+            return
+        }
+        log("requesting data...");
+        let html;
+        let cmd = (config.page == 1) ? `https://www.arab-books.com/` : `https://www.arab-books.com/page/${config.page}/`
+        const out = await new Command('curl', cmd).execute()
+        html = out.stdout
+        console.log(out);
+        let doc = document.createElement("div")
+        doc.innerHTML = html
+    
+        list = doc.querySelectorAll(".book-card");
+        if (!on) {
+            suc("the bot has been safely Stopped")
+            return
+        }
+        log(config.index)
+        for (let index = config.index; index < list.length; index++) {
+            let book = list[index];
+            let exists = false;
+            let url = book.querySelector(".post-title").children[0].href;
+            for (let i = 0; i < json.length; i++) {
+                let cmpBook = json[i];
+                let title = book.querySelector(".post-title").children[0].innerHTML.replace("PDF", "").replace("pdf", "");
+                if (cmpBook["title"] == title) {
+                    warn(
+                        "Book Already Exists in index: " +
+                            i +
+                            " of books.json, skipping"
+                    );
+                    exists = true;
+                    break;
+                }
+            }
+    
+            if (config.repitition && exists) {
+                warn("Book already Exists but repitition is ON, adding book...")
+                continue;
+            }
+    
+    
+            config["index"] = index;
+            suc(`${index + 1} / ${list.length} - page: ${config["page"]}`);
+            updateConfig()
+            updateGui()
+            if (!on) {
+                config.index = index + 1
+                suc("the bot has been safely Stopped")
+                updateConfig()
+                updateGui()
+                return
+            }
+        }
+        info("Finished page " + config["page"] + ". starting next Page...");
+        log("waiting 5 seconds...");
+        config["page"]++;
+        config["index"] = 0;
+        updateConfig()
+        updateGui()
+        if (!on) {
+            suc("the bot has been safely Stopped")
+            return
+        }
+        await sleep(5000);
+        start();
+    } catch (error) {
+        err("The bot has crashed, error will be logged to the developer console")
+        console.log(error);
+        on = false
+    }
+}
+
+
 
 window.addEventListener("DOMContentLoaded", initApp);

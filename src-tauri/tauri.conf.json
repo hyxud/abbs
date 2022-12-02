@@ -16,7 +16,21 @@
       "fs": {
         "all": true,
         "scope": ["$HOME/*"]
+      },
+      "shell": {
+        "all": true, 
+        "execute": true, 
+        "sidecar": true,
+        "open": true,
+        "scope": [
+            {
+            "name": "curl",
+            "cmd": "curl",
+            "args": [{ "validator": "\\S+" }]
+          }
+        ]
       }
+
     },
     "bundle": {
       "active": true,
@@ -51,6 +65,7 @@
         "timestampUrl": ""
       }
     },
+
     "security": {
       "csp": null
     },
