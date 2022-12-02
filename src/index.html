@@ -1,44 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Arab Books Book Stealer</title>
-    <script type="module" src="/main.js" defer></script>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="style.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Arab Books Book Stealer</title>
+        <script type="module" src="/main.js" defer></script>
+    </head>
+    <body>
+        <div id="app">
+            <div id="config">
+                <div class="sec path">
+                    <h3>Path Configuration</h3> <br>
+                    <div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="local"/>
+                            <p>Use Program Folder</p>
+                        </div> 
+                    </div>
+                    <br>
+                    <p id="pdf-p">loading</p>
+                    <input type="text" id="pdf" placeholder="Pdf Path" /> <br />
+                    <p id="img-p">loading</p>
+                    <input type="text" id="img" placeholder="Image Path" />
+                    <br />
+                    <p id="json-p">loading</p>
+                    <input type="text" id="json" placeholder="Json Path" />
+                    <br />
+                </div>
+                <div class="sec">
+                    <h3>Bot Configuration</h3>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="rep"/>
+                        <p>Repition</p>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="reload"/>
+                        <p>Reload</p>
+                    </div>
+                    <p class="note">
+                        Will Restart everything and stop the program to continue
+                        where it left off
+                    </p>
+                </div>
+                <div class="sec">
+                    <h3>Initial Values</h3>
+                    index: <input type="number" id="" value="0" /> <br />
+                    page: <input type="number" id="" value="1" />
+                </div>
+            </div>
+            <div id="control">
+                <div class="sec">
+                    <div class="btns">
+                        <button id="start">Start</button
+                        ><button id="stop">Stop</button
+                        ><button id="check">ReCheck</button>
+                    </div>
 
-  </head>
-  <body>
-    <div id="app">
-      <div id="config">
-        <div class="sec path">
-          <h3>Path Configuration</h3>
-          <br>
-          <p id="pdf-p">loading</p><input type="text" id="pdf" placeholder="Pdf Path"> <br>
-          <p id="img-p">loading</p><input type="text" id="img" placeholder="Image Path"> <br>
-          <p id="json-p">loading</p><input type="text" id="json" placeholder="Json Path"> <br>
+                    <div class="checkbox-container">
+                        <input type="checkbox" checked id="autoscroll" />
+                        <p>Auto Scroll</p>
+                    </div>
+                </div>
+                <div id="log"></div>
+            </div>
         </div>
-        <div class="sec">
-          <h3>Bot Configuration</h3>
-          <div class="checkbox-container"><input type="checkbox"><p>Repition</p></div>
-          <div class="checkbox-container"><input type="checkbox"><p>Reload</p></div>
-          <p class="note">Will Restart everything and stop the program to continue where it left off</p>
-        </div>
-        <div class="sec">
-          <h3>Initial Values</h3>
-          index: <input type="number" id="" value="0"> <br>
-          page:  <input type="number" id="" value="1">
-        </div>
-      </div>
-      <div id="control">
-        <div class="sec">
-          <Button id="start">Start</Button>
-          <button id="stop">Stop</button><br><br>
-          <div class="checkbox-container"><input type="checkbox" checked id="autoscroll"><p> Auto Scroll </p></div>
-
-        </div>
-        <div id="log"></div>
-      </div>
-    </div>
-  </body>
+    </body>
 </html>

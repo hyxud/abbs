@@ -133,3 +133,14 @@ input:hover, button:hover {
 .white {
   color: rgb(201, 201, 201);
 }
+.yellow {
+    color: rgb(239, 204, 31);
+  }
+.btns {
+  grid-template-columns: auto auto;
+  display: grid;
+  gap: 5px;
+}
+#start {
+  grid-column: 1/3;
+}
