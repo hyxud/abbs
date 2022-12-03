@@ -7,7 +7,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "abbs",
+    "productName": "duplicato",
     "version": "0.1.0"
   },
   "tauri": {
@@ -27,6 +27,11 @@
             "name": "curl",
             "cmd": "curl",
             "args": [{ "validator": "\\S+" }]
+          },
+          {
+            "name": "curlout",
+            "cmd": "curl",
+            "args": [{ "validator": "\\S+" }, "--output" ,{ "validator": "\\S+" }]
           }
         ]
       }
@@ -47,7 +52,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.hyxud.abbs",
+      "identifier": "com.hyxud.duplycato",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -77,7 +82,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "abbs",
+        "title": "Duplycato",
         "width": 800
       }
     ]

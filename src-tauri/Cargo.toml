@@ -1,8 +1,8 @@
 [package]
-name = "abbs"
+name = "duplycato"
 version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "Advanced Book Site Data Duplicator"
+authors = ["hyxud"]
 license = ""
 repository = ""
 edition = "2021"

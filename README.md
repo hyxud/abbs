@@ -1,7 +1,32 @@
-# Tauri + Vanilla
+# Duplycato
 
-This template should help get you started developing with Tauri in vanilla HTML, CSS and Javascript.
+a little GUI program that steals data from [this](https://arab-books.com) arabic book site
 
-## Recommended IDE Setup
+the program is very configurable, not gonna spend the time to document how to use it, launch it and try to get it running.
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+### features
++ does cool stuff Cool stuff and steals Data
++ can be configured a lot
++ extremely buggy
+
+**planning to add More websites as options to steal from in the future**
+
+### how to Build and Run after Forking
+#### to launch in dev mode
+firstly run
+
+`npm install`
+
+then
+
+`npm run localhost`
+
+and finally run run
+
+`npm run dev`
+
+wait for it to compile and it should lauch a window with hot reload.
+if you get errors go to the tauri website and follow the instructions to install the dependecies 
+
+#### How to build
+run `npm run tauri build`
