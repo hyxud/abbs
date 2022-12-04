@@ -9,12 +9,11 @@ const {
     readTextFile,
     writeFile,
 } = window.__TAURI__.fs;
-const { homeDir, join, resourceDir } = window.__TAURI__.path;
+const { homeDir, join } = window.__TAURI__.path;
 const { Command } = window.__TAURI__.shell;
 let logDiv;
 let scroll = true;
 let homePath;
-
 let pdfPathInput;
 let imgPathInput;
 let jsonPathInput;
@@ -104,7 +103,7 @@ function getUsedDir() {
     return config.local ? resPath : homePath;
 }
 function usedDir() {
-    return config.local ? BaseDirectory.Resource : BaseDirectory.Home;
+    return config.local ? BaseDirectory.Home : BaseDirectory.Home;
 }
 function onStop() {
     if (config.reset) {
@@ -116,7 +115,7 @@ function updateGui() {
     document.getElementById("pdf-p").innerHTML = getUsedDir();
     document.getElementById("img-p").innerHTML = getUsedDir();
     document.getElementById("json-p").innerHTML = getUsedDir();
-    document.getElementById("local").checked = config.local;
+    // document.getElementById("local").checked = config.local;
     document.getElementById("rep").checked = config.repitition;
     document.getElementById("reset-check").checked = config.reset;
     document.getElementById("index").value = config.index;
@@ -222,7 +221,7 @@ async function check() {
 
 async function initApp() {
     homePath = await homeDir();
-    resPath = await resourceDir();
+    resPath = await homeDir();
     logDiv = document.getElementById("log");
     check();
 
@@ -286,11 +285,11 @@ async function initApp() {
     document.getElementById("autoscroll").addEventListener("change", (e) => {
         scroll = e.target.checked;
     });
-    document.getElementById("local").addEventListener("change", (e) => {
-        config.local = e.target.checked ? true : false;
-        updateConfig();
-        updateGui();
-    });
+    // document.getElementById("local").addEventListener("change", (e) => {
+    //     config.local = e.target.checked ? true : false;
+    //     updateConfig();
+    //     updateGui();
+    // });
     document.getElementById("rep").addEventListener("change", (e) => {
         config.repitition = e.target.checked ? true : false;
         updateConfig();
@@ -308,14 +307,17 @@ async function initApp() {
         clearPdfFolder()
         config.index = 0
         config.page = 1
+        json = []
+        document.getElementById("index").value = config.index;
+        document.getElementById("page").value = config.page;
         warn("Clearing Books.json")
         await writeFile(
             await join(config.jsonPath, "books.json"),
-            "[]".stringify(json),
+            "[]",
             { dir: usedDir() }
         );
-        updateConfig()
         updateGui()
+        updateConfig()
     });
 }
 
@@ -420,7 +422,7 @@ async function getBook(url) {
     }
     obj.img = imgName;
     obj.pdf = pdfName;
-    console.log(obj);
+    
     json.push(obj);
     await writeFile(
         await join(config.jsonPath, "books.json"),
@@ -472,21 +474,22 @@ async function start() {
                     .children[0].innerHTML.replace("PDF", "")
                     .replace("pdf", "");
                 if (cmpBook["title"] == title) {
-                    warn(
-                        "Book Already Exists in index: " +
-                            i +
-                            " of books.json, skipping"
-                    );
                     exists = true;
                     break;
                 }
             }
 
+            if (exists){
+                info(
+                    "Book already Exists, skipping"
+                );
+                continue;
+            }
+
             if (config.repitition && exists) {
                 warn(
                     "Book already Exists but repitition is ON, adding book..."
-                );
-                continue;
+                )
             }
 
             let code = await getBook(url);
@@ -525,7 +528,7 @@ async function start() {
         start();
     } catch (error) {
         err(
-            "The bot has crashed, error will be logged to the developer console"
+            "The bot has crashed with error: \n\n -> "+error+"\n\nplease report this to the developer"
         );
         console.log(error);
         running = false;

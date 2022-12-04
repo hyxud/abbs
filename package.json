@@ -6,7 +6,8 @@
   "scripts": {
     "localhost": "servor src index.html 8080 --reload",
     "tauri": "tauri",
-    "dev": "tauri dev"
+    "dev": "tauri dev",
+    "build": "tauri build -b [dmg]"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.1.0"
