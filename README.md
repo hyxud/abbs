@@ -12,12 +12,17 @@ the program is very configurable, not gonna spend the time to document how to us
 
 **planning to add More websites as options to steal from in the future**
 #
-## **how to Build and Run after Forking**
-### **to launch in dev mode**
-just run
+## **Getting Started**
 
 ```
+git clone https://github.com/hyxud/duplycato
+cd duplycato
 npm install
+```
+
+### **to launch in dev mode**
+just run
+```
 npm run localhost
 ```
 after that run this on a seperate terminal session
