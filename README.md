@@ -13,17 +13,16 @@ the program is very configurable, not gonna spend the time to document how to us
 
 ### how to Build and Run after Forking
 #### to launch in dev mode
-firstly run
+just run
 
-`npm install`
-
-then
-
-`npm run localhost`
-
-and finally run run
-
-`npm run dev`
+```
+npm install
+npm run localhost
+```
+after that run this on a seperate terminal session
+```
+npm run dev
+```
 
 wait for it to compile and it should lauch a window with hot reload.
 if you get errors go to the tauri website and follow the instructions to install the dependecies 
